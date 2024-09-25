@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
-import { useSalesContext } from '../hooks/useSalesContext';
+
 import { SalesContextType } from '../context/sales.context';
+import { useSalesContext } from '../hooks/useSalesContext';
 
 interface FilterModalProps {
   isLoading: boolean;

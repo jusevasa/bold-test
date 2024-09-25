@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle, Link, CircleX, ReceiptText } from 'lucide-react';
-import { Transaction } from '../types/transaction.type';
-import { Status } from '../enums/status.enum';
-import { formatCurrency } from '../utils/format-currency.utils';
 import { DateTime } from 'luxon';
-import { PaymentMethod } from '../enums/payment-method.enum';
-import { Franchise } from '../enums/franchise.enum';
-import { MasterCardIcon } from './icons/mastercard-icon';
-import { VisaIcon } from './icons/visa-icon';
+
 import { BancolombiaIcon } from './icons/bancolombia-icon';
 import { DaviPlataIcon } from './icons/daviplata-icon';
+import { formatCurrency } from '../utils/format-currency.utils';
+import { Franchise } from '../enums/franchise.enum';
+import { MasterCardIcon } from './icons/mastercard-icon';
 import { NequiIcon } from './icons/nequi-icon';
+import { PaymentMethod } from '../enums/payment-method.enum';
 import { SalesType } from '../enums/sales-type.enum';
+import { Status } from '../enums/status.enum';
+import { Transaction } from '../types/transaction.type';
+import { VisaIcon } from './icons/visa-icon';
+import pseIcon from '../assets/pse.png';
 
 interface ModalTransactionProps {
   isOpen: boolean;
@@ -160,7 +162,7 @@ const renderPaymentMethod = ({
     [PaymentMethod.nequi]: <NequiIcon className='w-10 h-10' />,
     [PaymentMethod.pse]: (
       <img
-        src='src/assets/pse.png'
+        src={pseIcon}
         alt='pse'
         className='w-10 h-10'
         width={100}

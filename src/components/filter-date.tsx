@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon';
-import { useSalesContext } from '../hooks/useSalesContext';
-import { SalesContextType } from '../context/sales.context';
+
 import { capitalizeFirstCharacter } from '../utils/capitalize.utils';
+import { SalesContextType } from '../context/sales.context';
+import { useSalesContext } from '../hooks/useSalesContext';
 
 interface FilterDateProps {
   isLoading: boolean;

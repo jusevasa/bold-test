@@ -1,5 +1,6 @@
 import { InfoIcon } from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
+
 import { formatCurrency } from '../utils/format-currency.utils';
 
 interface CardDashboardProps {
