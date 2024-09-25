@@ -39,7 +39,7 @@ export const CardDashboard = ({
         <p className='text-white text-sm'>
           Total de ventas {labelByDayFiltered.toLowerCase()}
         </p>
-        <InfoIcon className='w-4 h-4 text-white' data-tooltip-id='my-tooltip' />
+        <InfoIcon className='w-4 h-4 text-white' data-tooltip-id='my-tooltip' role='img' />
         <Tooltip place='top' id='my-tooltip'>
           {renderTooltip()}
         </Tooltip>

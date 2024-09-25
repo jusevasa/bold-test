@@ -16,10 +16,12 @@ export const formatCurrency = (
     maximumFractionDigits = 2,
   } = options;
 
-  return new Intl.NumberFormat(locale, {
+  const formattedCurrency = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     minimumFractionDigits,
     maximumFractionDigits,
   }).format(amount);
+
+  return formattedCurrency.replace(/\u00A0/g, ' ');
 };
