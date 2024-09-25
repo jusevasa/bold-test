@@ -1,35 +1,128 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { DateTime } from 'luxon';
+import { Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+import { Layout } from './sections/layout';
+import { TransactionList } from './components/transaction-list';
+import { FilterModal } from './components/filter-modal';
+import { fetchTransactions } from './services/transactions.service';
+import { useSalesContext } from './hooks/useSalesContext';
+import { FilterDate } from './components/filter-date';
+import { capitalizeFirstCharacter } from './utils/capitalize.utils';
+import { ModalTransaction } from './components/modal-transaction';
+import { Transaction } from './types/transaction.type';
+import { CardDashboard } from './components/card-dashboard';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {
+    setTransactions,
+    totalSales,
+    filteredTransactions,
+    filters,
+    setFilters,
+  } = useSalesContext();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentTransaction, setCurrentTransaction] = useState<Transaction>();
+
+  useEffect(() => {
+    const getTransactions = async () => {
+      setIsLoading(true);
+      const transactions = await fetchTransactions();
+      setTransactions(transactions);
+      setIsLoading(false);
+    };
+
+    getTransactions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const renderDateByFilter = () => {
+    const today = DateTime.local().toFormat("dd 'de' MMMM yyyy");
+    const startOfWeek = DateTime.local().startOf('week').toFormat('MMM dd, yy');
+    const endOfWeek = DateTime.local().endOf('week').toFormat('MMM dd, yy');
+
+    const month = DateTime.local().toFormat('MMMM, yyyy');
+
+    if (filters.today) return today;
+    if (filters.thisWeek)
+      return (
+        capitalizeFirstCharacter(startOfWeek) +
+        ' - ' +
+        capitalizeFirstCharacter(endOfWeek)
+      );
+    if (filters.thisMonth) return capitalizeFirstCharacter(month);
+    return '';
+  };
+
+  const renderLabelDayFiltered = () => {
+    const currentMonth = DateTime.local().toFormat('MMMM');
+
+    if (filters.today) return 'Hoy';
+    if (filters.thisWeek) return 'en Esta semana';
+    if (filters.thisMonth) return capitalizeFirstCharacter(currentMonth);
+
+    return '';
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Layout>
+        <main className='max-w-5xl mx-auto px-6'>
+          <section className='pt-10 max-w-screen-xl mx-auto'>
+            <div className='grid grid-cols-1 gap-y-10 md:grid-cols-[300px,1fr] md:gap-x-10'>
+              <CardDashboard
+                filters={filters}
+                totalSales={totalSales}
+                dateByFilter={renderDateByFilter()}
+                labelByDayFiltered={renderLabelDayFiltered()}
+                isLoading={isLoading}
+              />
+              <div className='flex flex-col gap-y-3'>
+                <FilterDate isLoading={isLoading} />
+                <FilterModal isLoading={isLoading} />
+              </div>
+            </div>
+            <div className='flex flex-col bg-gradient-to-r from-primary to-secondary rounded-t-2xl mt-4'>
+              <div className='p-3 text-white'>
+                <h2 className='text-sm'>
+                  Tus ventas {renderLabelDayFiltered().toLowerCase()}
+                </h2>
+              </div>
+              <div className='flex bg-white justify-center items-center'>
+                <div className='px-3 py-5'>
+                  <Search className='w-4 h-4 text-gray-300' />
+                </div>
+                <input
+                  type='text'
+                  placeholder='Buscar'
+                  className='w-full text-sm text-gray-dark bg-transparent px-4 py-2 focus:outline-none'
+                  value={filters.searchQuery}
+                  onChange={(e) =>
+                    setFilters({ ...filters, searchQuery: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <TransactionList
+              transactions={filteredTransactions}
+              onClick={(transaction) => {
+                setIsModalOpen(true);
+                setCurrentTransaction(transaction);
+              }}
+              isLoading={isLoading}
+            />
+          </section>
+        </main>
+        <ModalTransaction
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          transaction={currentTransaction}
+        />
+      </Layout>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
