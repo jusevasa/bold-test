@@ -2,7 +2,7 @@ import { Transaction } from '../types/transaction.type';
 
 export const fetchTransactions = async (): Promise<Transaction[]> => {
   try {
-    const response = await fetch('https://bold-fe-api.vercel.app/api', {
+    const response = await fetch(import.meta.env.VITE_API_URL, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
