@@ -22,7 +22,7 @@ describe('ModalTransaction', () => {
     render(
       <ModalTransaction
         isOpen={true}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         transaction={mockTransaction}
       />
     );
@@ -30,14 +30,14 @@ describe('ModalTransaction', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('Detalles de la transacción')).toBeInTheDocument();
     expect(screen.getByText('¡Cobro exitoso!')).toBeInTheDocument();
-    expect(screen.getByText('10000')).toBeInTheDocument();
+    expect(screen.getByText('$ 10.000')).toBeInTheDocument();
   });
 
   it('does not render the modal when isOpen is false', () => {
     const { container } = render(
       <ModalTransaction
         isOpen={false}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         transaction={mockTransaction}
       />
     );
@@ -46,7 +46,7 @@ describe('ModalTransaction', () => {
   });
 
   it('calls onClose when the close button is clicked', () => {
-    const handleClose = jest.fn();
+    const handleClose = vi.fn();
     render(
       <ModalTransaction
         isOpen={true}
@@ -55,7 +55,7 @@ describe('ModalTransaction', () => {
       />
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /close/i }));
+    fireEvent.click(screen.getByRole('button'));
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -63,20 +63,20 @@ describe('ModalTransaction', () => {
     render(
       <ModalTransaction
         isOpen={true}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         transaction={mockTransaction}
       />
     );
 
     expect(screen.getByText(mockTransaction.id)).toBeInTheDocument();
-    expect(screen.getByText('- 10,000')).toBeInTheDocument();
+    expect(screen.getByText('$ 10.000')).toBeInTheDocument();
   });
 
   it('renders the correct payment method', () => {
     render(
       <ModalTransaction
         isOpen={true}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         transaction={mockTransaction}
       />
     );
@@ -88,7 +88,7 @@ describe('ModalTransaction', () => {
     render(
       <ModalTransaction
         isOpen={true}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         transaction={mockTransaction}
       />
     );

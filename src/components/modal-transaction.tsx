@@ -47,6 +47,8 @@ export const ModalTransaction: React.FC<ModalTransactionProps> = ({
       className={`fixed inset-0 z-50 ${
         isOpen ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
+      data-testid='modal-detail'
+      role='dialog'
     >
       <div
         className={`fixed inset-0 bg-black transition-opacity duration-500 ease-in-out ${
@@ -69,6 +71,7 @@ export const ModalTransaction: React.FC<ModalTransactionProps> = ({
             <button
               onClick={onClose}
               className='text-gray-400 hover:text-gray-500'
+              role='button'
             >
               <X className='h-6 w-6 text-primary' />
             </button>

@@ -52,6 +52,7 @@ export const TransactionList = ({
                 : ''
             }`}
             onClick={() => onClick(transaction)}
+            data-testid="transaction-item"
           >
             <td className={isDedution(transaction) ? 'pb-8' : ''}>
               {renderStatus({

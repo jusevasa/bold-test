@@ -1,50 +1,68 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# BOLD Technical Test
 
-Currently, two official plugins are available:
+This repository contains a technical test project developed for the company BOLD. The project includes unit tests and end-to-end (E2E) tests to ensure functionality and reliability. It is built using React, Vite, and TypeScript.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Contents
 
-## Expanding the ESLint configuration
+- **Unit Tests**: Implemented using Vitest for testing components and utilities.
+- **End-to-End Tests**: Implemented using Playwright to simulate user interactions and validate application behavior.
+- **Development Environment**: The application is deployed and can be previewed on Vercel.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Getting Started
 
-- Configure the top-level `parserOptions` property like this:
+To get started with the project, follow these steps:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Prerequisites
+
+Ensure you have the following installed:
+
+- Node.js (version 14 or higher)
+- pnpm (preferred package manager)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/jusevasa/bold-test
+   cd bold-test
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+### Running in Development
+
+To start the development server, run:
+
+```bash
+pnpm dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+The application will be accessible at `http://localhost:5173/`.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Running Tests
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- **Unit Tests**: To run the unit tests, execute:
+
+  ```bash
+  pnpm test
+  ```
+
+- **End-to-End Tests**: To run the end-to-end tests, execute:
+
+  ```bash
+  pnpm test:e2e
+  ```
+
+## Deployment
+
+The application is deployed on Vercel. You can access the live version [here](<https://bold-test-nine.vercel.app/>).
+
+## Acknowledgements
+
+Thank you for the opportunity to showcase my skills through this technical test. I look forward to your feedback.

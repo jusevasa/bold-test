@@ -34,9 +34,9 @@ export const CardDashboard = ({
   };
   if (isLoading) return <CardDashboardSkeleton />;
   return (
-    <div className='bg-white shadow-md rounded-lg'>
+    <div className='bg-white shadow-md rounded-lg' data-testid="card-dashboard">
       <div className='flex justify-between items-center bg-gradient-to-r from-primary to-secondary rounded-t-lg p-3'>
-        <p className='text-white text-sm'>
+        <p className='text-white text-sm' data-testid="dashboard-total-sales">
           Total de ventas {labelByDayFiltered.toLowerCase()}
         </p>
         <InfoIcon className='w-4 h-4 text-white' data-tooltip-id='my-tooltip' role='img' />
