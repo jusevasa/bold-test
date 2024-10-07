@@ -1,26 +1,24 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
 
-import { SalesContextType } from '../context/sales.context';
-import { useSalesContext } from '../hooks/useSalesContext';
+import { useSales } from '../hooks/useSalesContext';
 
 interface FilterModalProps {
   isLoading: boolean;
 }
 
-export const FilterModal = ({ isLoading }: FilterModalProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [tempFilters, setTempFilters] = useState<
-    SalesContextType['filters'] | null
-  >(null);
+export const FilterModal: React.FC<FilterModalProps> = ({ isLoading }) => {
+  const { state, dispatch } = useSales();
+  const { filters } = state;
 
-  const { filters, setFilters } = useSalesContext();
+  const [isOpen, setIsOpen] = useState(false);
+  const [tempFilters, setTempFilters] = useState(filters);
+
   const buttonRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const toggleModal = () => {
     setIsOpen((prev) => !prev);
-
     if (!isOpen) {
       setTempFilters(filters);
     }
@@ -30,7 +28,7 @@ export const FilterModal = ({ isLoading }: FilterModalProps) => {
     const { name, checked } = event.target;
 
     setTempFilters((prevFilters) => ({
-      ...(prevFilters as SalesContextType['filters']),
+      ...prevFilters,
       [name]: checked,
       ...(name === 'all' ? { dataphone: false, paymentLink: false } : {}),
       ...(name === 'dataphone' ? { all: false, paymentLink: false } : {}),
@@ -38,10 +36,15 @@ export const FilterModal = ({ isLoading }: FilterModalProps) => {
     }));
   };
 
+  const isButtonDisabled =
+    isLoading ||
+    (tempFilters.dataphone === false &&
+      tempFilters.paymentLink === false &&
+      tempFilters.all === false);
+
   const handleApply = () => {
-    if (tempFilters) {
-      setFilters(tempFilters);
-    }
+    if (isButtonDisabled) return;
+    dispatch({ type: 'SET_FILTERS', payload: tempFilters });
     toggleModal();
   };
 
@@ -78,7 +81,7 @@ export const FilterModal = ({ isLoading }: FilterModalProps) => {
   return (
     <div className='flex justify-end'>
       <button
-        className={`font-bold text-sm  self-end 
+        className={`font-bold text-sm self-end 
               transition-colors bg-white shadow-md 
               pl-8 pr-4 py-2 rounded-md flex 
               justify-center items-center gap-x-1 
@@ -125,25 +128,30 @@ export const FilterModal = ({ isLoading }: FilterModalProps) => {
             <FilterCheckbox
               label='Cobro con datáfono'
               name='dataphone'
-              checked={tempFilters?.dataphone || false}
+              checked={tempFilters.dataphone}
               onChange={handleCheckboxChange}
             />
             <FilterCheckbox
               label='Cobro con link de pago'
               name='paymentLink'
-              checked={tempFilters?.paymentLink || false}
+              checked={tempFilters.paymentLink}
               onChange={handleCheckboxChange}
             />
             <FilterCheckbox
               label='Ver todos'
               name='all'
-              checked={tempFilters?.all || false}
+              checked={tempFilters.all}
               onChange={handleCheckboxChange}
             />
           </div>
           <button
             onClick={handleApply}
-            className='mt-4 w-full bg-secondary text-white py-2 rounded-full hover:bg-red-600 transition duration-300'
+            disabled={isButtonDisabled}
+            className={`mt-4 w-full py-2 rounded-full transition duration-300 ${
+              isButtonDisabled
+                ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                : 'bg-secondary text-white hover:bg-red-600'
+            }`}
           >
             Aplicar
           </button>
@@ -160,12 +168,12 @@ interface FilterCheckboxProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FilterCheckbox = ({
+const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
   label,
   name,
   checked,
   onChange,
-}: FilterCheckboxProps) => (
+}) => (
   <label className='flex items-center space-x-2'>
     <input
       type='checkbox'
